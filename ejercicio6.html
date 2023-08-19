@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio-6</title>
+</head>
+<body>
+    <button id="carga">Cargar Archivo</button>
+    <p id="seleccion"></p>
+    <p id="v-formato"></p>
+    <p id="v-tamaño"></p>
+    <p id="cargaE"></p>
+    <p id="complete"></p>
+    <script>
+
+        const btnCarga = document.querySelector("#carga");
+        // Función para simular la selección de un archivo
+function seleccionarArchivo() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const archivoSeleccionado = "archivo.mp4"; // Nombre de archivo simulado
+      resolve(archivoSeleccionado);
+    }, Math.random() * 1000); // Tiempo aleatorio de espera entre 0 y 1000 ms
+  });
+}
+
+// Función para simular la verificación de formato del archivo
+function verificarFormato(archivo) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const formatoValido = archivo.endsWith(".mp4"); // Verificación de formato simulada
+      resolve(formatoValido);
+    }, Math.random() * 1000);
+  });
+}
+
+// Función para simular la verificación de tamaño del archivo
+function verificarTamaño(archivo, formatoValido) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const tamañoValido = formatoValido && archivo.length < 5000000; // Verificación de tamaño simulada
+      resolve(tamañoValido);
+    }, Math.random() * 1000);
+  });
+}
+
+// Función para simular el proceso de carga del archivo
+function cargarArchivo(archivo, tamañoValido) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const cargaExitosa = tamañoValido; // Simulación de carga exitosa
+      resolve(cargaExitosa);
+    }, Math.random() * 1000);
+  });
+}
+
+// Función principal asincrónica para encadenar las tareas
+async function procesoDeCarga() {
+  try {
+    const archivo = await seleccionarArchivo();
+    document.querySelector("#seleccion").textContent = `Archivo Seleccionado: ${archivo}`;
+    console.log("Archivo seleccionado:", archivo);
+
+    const formatoValido = await verificarFormato(archivo);
+    document.querySelector("#v-formato").textContent = `Formato Valido: ${archivo}`;
+    console.log("Formato válido:", formatoValido);
+
+    const tamañoValido = await verificarTamaño(archivo, formatoValido);
+    document.querySelector("#v-tamaño").textContent = `Tamaño Valido: ${archivo}`;
+    console.log("Tamaño válido:", tamañoValido);
+
+    const cargaExitosa = await cargarArchivo(archivo, tamañoValido);
+    document.querySelector("#cargaE").textContent = `carga Exitosa: ${archivo}`;
+    console.log("Carga exitosa:", cargaExitosa);
+
+    if (!cargaExitosa) {
+    document.querySelector("#cargaE").textContent = `carga Fallida: ${archivo}`;
+      throw new Error("La carga del archivo ha fallado.");
+    }
+    document.querySelector("#complete").textContent = `carga Completa: ${archivo}`;
+    console.log("Proceso de carga completado con éxito.");
+  } catch (error) {
+    console.error("Error durante el proceso de carga:", error.message);
+  }
+}
+
+// Llamada a la función principal asincrónica
+btnCarga.addEventListener('click', procesoDeCarga);
+
+    </script>
+</body>
+</html>
